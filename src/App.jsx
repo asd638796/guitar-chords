@@ -51,13 +51,24 @@ function Circle({ number, showNumber }) {
 function GuitarFretboard() {
   const [chord, setChord] = useState('');
   const [scaleShape, setScaleShape] = useState('');
+  const [fretNumber, setFretNumber] = useState(''); // New state for fret number
   const [showClosedGrid, setShowClosedGrid] = useState(false);
   const [showOpenGrid, setShowOpenGrid] = useState(false);
-  const [showNumbers, setShowNumbers] = useState(true); // Toggle numbers
+  const [showNumbers, setShowNumbers] = useState(true);
   const [circles, setCircles] = useState([]);
 
   const rows = 5;
   const cols = 4;
+
+  const handleClosedGridToggle = () => {
+    setShowClosedGrid((prev) => !prev);
+    if (!showClosedGrid) setShowOpenGrid(false);
+  };
+
+  const handleOpenGridToggle = () => {
+    setShowOpenGrid((prev) => !prev);
+    if (!showOpenGrid) setShowClosedGrid(false);
+  };
 
   const generateVisualization = () => {
     const chordArray = chord
@@ -122,6 +133,15 @@ function GuitarFretboard() {
           style={{ width: '50vw', height: '150px', padding: '10px' }}
         />
 
+        {/* Input for fret number */}
+        <input
+          type="text"
+          placeholder="Enter a fret number e.g., 1"
+          value={fretNumber}
+          onChange={(e) => setFretNumber(e.target.value)}
+          style={{ width: '50vw', padding: '10px', marginTop: '10px', marginBottom: '10px' }}
+        />
+
         <div style={{ marginTop: '10px' }}>
           <button
             onClick={generateVisualization}
@@ -131,7 +151,7 @@ function GuitarFretboard() {
           </button>
 
           <button
-            onClick={() => setShowClosedGrid(!showClosedGrid)}
+            onClick={handleClosedGridToggle}
             style={{ padding: '10px 20px', cursor: 'pointer', marginRight: '10px' }}
           >
             {showClosedGrid
@@ -140,7 +160,7 @@ function GuitarFretboard() {
           </button>
 
           <button
-            onClick={() => setShowOpenGrid(!showOpenGrid)}
+            onClick={handleOpenGridToggle}
             style={{ padding: '10px 20px', cursor: 'pointer', marginRight: '10px' }}
           >
             {showOpenGrid
@@ -148,7 +168,6 @@ function GuitarFretboard() {
               : 'Show Fretboard Grid (Open Position)'}
           </button>
 
-          {/* TOGGLE SHOW NUMBERS */}
           <button
             onClick={() => setShowNumbers(!showNumbers)}
             style={{ padding: '10px 20px', cursor: 'pointer' }}
@@ -163,7 +182,10 @@ function GuitarFretboard() {
           position: 'relative',
           width: '70vw',
           height: '50vh',
-          margin: '5vw',
+          margin: '7.5vw',
+          marginLeft: '20vw',
+          transform: 'scale(0.8)', // Scale the visualization to 80%
+          transformOrigin: 'top left', // Keep scaling relative to the top-left corner
         }}
       >
         {showClosedGrid && (
@@ -191,6 +213,22 @@ function GuitarFretboard() {
             }}
           >
             <GridLines rows={5} cols={4} />
+          </div>
+        )}
+
+        {/* Fret number display */}
+        {fretNumber && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '-10vh',
+              left: showOpenGrid ? '18vw' : '5.5vw', // Adjust position based on grid
+              fontSize: '2vw',
+              fontWeight: 'bold',
+              fontFamily: 'Arial, sans-serif',
+            }}
+          >
+            {fretNumber}
           </div>
         )}
 
