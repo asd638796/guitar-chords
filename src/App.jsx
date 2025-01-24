@@ -26,7 +26,7 @@ function GridLines({ rows, cols }) {
   );
 }
 
-function Circle({ number, showNumber }) {
+function Circle({ label, showLabel }) {
   return (
     <div
       style={{
@@ -43,7 +43,7 @@ function Circle({ number, showNumber }) {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      {showNumber && number}
+      {showLabel && label}
     </div>
   );
 }
@@ -54,7 +54,7 @@ function GuitarFretboard() {
   const [fretNumber, setFretNumber] = useState(''); // New state for fret number
   const [showClosedGrid, setShowClosedGrid] = useState(false);
   const [showOpenGrid, setShowOpenGrid] = useState(false);
-  const [showNumbers, setShowNumbers] = useState(true);
+  const [showLabels, setShowLabels] = useState(true);
   const [circles, setCircles] = useState([]);
 
   const rows = 5;
@@ -73,14 +73,12 @@ function GuitarFretboard() {
   const generateVisualization = () => {
     const chordArray = chord
       .split(' ')
-      .map((val) => (val === 'x' ? null : parseInt(val, 10)));
+      .map((val) => (val === 'x' ? null : val));
 
     const scaleArray = scaleShape
       .trim()
       .split('\n')
-      .map((line) =>
-        line.split(' ').map((v) => (v === 'x' ? null : parseInt(v, 10)))
-      );
+      .map((line) => line.split(' ').map((v) => (v === 'x' ? null : v)));
 
     const newCircles = [];
     for (let i = 0; i < chordArray.length; i++) {
@@ -120,7 +118,7 @@ function GuitarFretboard() {
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
-          placeholder='Enter chord (e.g., "x 1 x 3 7 x")'
+          placeholder='Enter chord (e.g., "x 1 x maj7 dim x")'
           value={chord}
           onChange={(e) => setChord(e.target.value)}
           style={{ width: '50vw', padding: '10px', marginBottom: '10px' }}
@@ -169,10 +167,10 @@ function GuitarFretboard() {
           </button>
 
           <button
-            onClick={() => setShowNumbers(!showNumbers)}
+            onClick={() => setShowLabels(!showLabels)}
             style={{ padding: '10px 20px', cursor: 'pointer' }}
           >
-            {showNumbers ? 'Hide Numbers' : 'Show Numbers'}
+            {showLabels ? 'Hide Labels' : 'Show Labels'}
           </button>
         </div>
       </div>
@@ -251,7 +249,7 @@ function GuitarFretboard() {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              <Circle number={c.chordValue} showNumber={showNumbers} />
+              <Circle label={c.chordValue} showLabel={showLabels} />
             </div>
           ))}
         </div>
