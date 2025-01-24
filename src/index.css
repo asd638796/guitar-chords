@@ -1,0 +1,9 @@
+/* Reset margin and padding for the whole document */
+html, body {
+    margin: 0;
+    padding: 0;
+    
+    
+ 
+  }
+  
